@@ -1,0 +1,8 @@
+CREATE TABLE [PROJEKT].[Messages]
+(
+	PMS_Id INT IDENTITY(1,1) PRIMARY KEY,
+	PMS_SenderId INT,
+	PMS_ReceiverId INT,
+	PMS_Message VARCHAR(MAX),
+	PMS_Date DATETIME
+)
