@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjektTechnologieSieciowe.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -62,6 +63,13 @@ namespace ProjektTechnologieSieciowe
                 MessageBox.Show("Nie zalogowano");
             }
             client.Disconnect();
+        }
+
+        private void Label_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Rejestracja rejestracjaOkno = new Rejestracja();
+            rejestracjaOkno.Show();
+            this.Close();
         }
     }
 }

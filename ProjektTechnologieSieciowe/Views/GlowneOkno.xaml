@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProjektTechnologieSieciowe"
         mc:Ignorable="d"
-        Title="GlowneOkno" Height="450" Width="800">
+        Title="GlowneOkno" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Height="450" Width="800">
     <Grid>
         
     </Grid>
