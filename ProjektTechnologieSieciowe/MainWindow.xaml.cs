@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TechnologieSiecioweLibrary.Models;
 
 namespace ProjektTechnologieSieciowe
 {
@@ -23,6 +25,43 @@ namespace ProjektTechnologieSieciowe
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private async void LogowanieButton_Click(object sender, RoutedEventArgs e)
+        {
+            string login, password;
+            login = LoginTextBox.Text;
+            password = HasloPasswordBox.Password;
+
+            User user = new User(0,login,password,"");
+
+            RequestData<User> requestData = new RequestData<User>();
+            requestData.Data = user;
+            requestData.Method = TechnologieSiecioweLibrary.Enums.Method.Login;
+
+            Client client = new Client();
+            client.Connect(Config.host,Config.port);
+
+            client.SendData(requestData.GetJSONBody());
+
+            var tokenResponse = await client.WaitForResponseAsync();
+
+            ResponseData<Token> responseData = new ResponseData<Token>();
+            responseData.ReadDataFromJSON(tokenResponse);
+
+            if (responseData.ResponseCode == TechnologieSiecioweLibrary.Enums.ResponseCode.OK)
+            {
+                Config.token = responseData.Data;
+                GlowneOkno okno = new GlowneOkno();
+                okno.Show();
+                this.Close();
+                MessageBox.Show("Zalogowano");
+            }
+            else
+            {
+                MessageBox.Show("Nie zalogowano");
+            }
+            client.Disconnect();
         }
     }
 }

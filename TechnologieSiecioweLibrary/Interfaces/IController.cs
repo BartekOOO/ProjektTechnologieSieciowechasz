@@ -10,6 +10,6 @@ namespace TechnologieSiecioweLibrary.Interfaces
 {
     public interface IController
     {
-        Task<string> ProcessData(string json,Method method);
+        Task<string> ProcessData(string json,Method method,Token token);
     }
 }

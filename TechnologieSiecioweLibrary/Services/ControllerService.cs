@@ -20,15 +20,32 @@ namespace TechnologieSiecioweLibrary.Services
                 string className = doc.RootElement.GetProperty("ClassName").GetString();
                 object jsonData = doc.RootElement.GetProperty("Data");
                 Method method = (Method)doc.RootElement.GetProperty("Method").GetInt32();
-                
+
+                Token token;
+                try
+                {
+                    token = JsonSerializer.Deserialize<RequestData<Token>>(json).Token;
+
+                    if (method == Method.Put)
+                    {
+                        string test = Kodek.Decrypt(token.TokenBW);
+                    }
+                }
+                catch
+                {
+                    token = new Token();
+                }
+
                 switch (className)
                 {
                     case "User":
-                        return new UserController().ProcessData(jsonData.ToString(),method).Result;
+                        return await new UserController().ProcessData(jsonData.ToString(),method,token);
                     case "Token":
-                        return new TokenController().ProcessData(jsonData.ToString(),method).Result;
+                        return await new TokenController().ProcessData(jsonData.ToString(),method, token);
                     case "Message":
-                        return new MsgController().ProcessData(jsonData.ToString(),method).Result;
+                        return await new MsgController().ProcessData(jsonData.ToString(),method, token);
+
+
                 }
             }
 

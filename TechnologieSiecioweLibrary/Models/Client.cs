@@ -1,124 +1,131 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using TechnologieSiecioweLibrary.Interfaces;
+using TechnologieSiecioweLibrary.Models;
 
-namespace TechnologieSiecioweLibrary.Models
+public class Client
 {
-    public class Client
+    private TcpClient _tcpClient;
+    private NetworkStream _stream;
+    private StreamReader _reader;
+    private StreamWriter _writer;
+    private Thread _receiveThread;
+    public List<string> responses;
+
+    public bool IsConnected { get; private set; } = false;
+
+    public Client()
     {
-        private readonly string _serverAddress;
-        private readonly int _port;
-        private TcpClient _client;
-        private NetworkStream _stream;
-        private Thread _receiveThread;
+        _tcpClient = new TcpClient();
+        responses = new List<string>();
+    }
 
-        private string _lastMessage;
-        private readonly object _messageLock = new object();
-
-        public Client(string serverAddress, int port)
+    // Rozpoczęcie połączenia z serwerem
+    public void Connect(string serverAddress, int port)
+    {
+        try
         {
-            _serverAddress = serverAddress;
-            _port = port;
-        }
+            _tcpClient.Connect(serverAddress, port);
+            _stream = _tcpClient.GetStream();
+            _reader = new StreamReader(_stream);
+            _writer = new StreamWriter(_stream) { AutoFlush = true };
 
-        public string GetLastMessage()
+            IsConnected = true;
+
+            // Uruchomienie wątku odbierającego wiadomości
+            _receiveThread = new Thread(ReceiveMessages);
+            _receiveThread.Start();
+
+            Console.WriteLine("Połączono z serwerem.");
+        }
+        catch (Exception ex)
         {
-            lock (_messageLock)
-            {
-                return _lastMessage;
-            }
+            Console.WriteLine("Błąd połączenia: " + ex.Message);
+            IsConnected = false;
         }
+    }
 
-        public void Connect()
+    // Wysyłanie wiadomości do serwera
+    public void SendData(string data)
+    {
+        if (IsConnected)
         {
             try
             {
-                _client = new TcpClient(_serverAddress, _port);
-                _stream = _client.GetStream();
-                Console.WriteLine("Połączono z serwerem.");
-
-
-                _receiveThread = new Thread(ReceiveMessages);
-                _receiveThread.IsBackground = true;
-                _receiveThread.Start();
+                _writer.WriteLine(data);
+               
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Błąd połączenia: {ex.Message}");
+                Console.WriteLine("Błąd podczas wysyłania wiadomości: " + ex.Message);
             }
         }
-
-        public void SendData<T>(RequestData<T> requestData) where T : IData
+        else
         {
-            try
-            {
-                if (_client == null || !_client.Connected)
-                {
-                    Console.WriteLine("Nie połączono z serwerem.");
-                    return;
-                }
-
-                byte[] messageBytes = Encoding.UTF8.GetBytes(requestData.GetJSONBody() + ";;;");
-                _stream.Write(messageBytes, 0, messageBytes.Length);
-                _stream.Flush();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Błąd wysyłania danych: {ex.Message}");
-            }
+            Console.WriteLine("Brak połączenia z serwerem.");
         }
+    }
 
-        private void ReceiveMessages()
+    // Odbieranie wiadomości od serwera i ich wyświetlanie na konsoli
+    private void ReceiveMessages()
+    {
+        try
         {
-            try
+            while (IsConnected)
             {
-                byte[] buffer = new byte[1024];
-                StringBuilder messageBuilder = new StringBuilder();
-
-                while (true)
+                string message = _reader.ReadLine();
+                if (message != null)
                 {
-                    int bytesRead = _stream.Read(buffer, 0, buffer.Length);
-
-                    if (bytesRead > 0)
-                    {
-                        messageBuilder.Append(Encoding.UTF8.GetString(buffer, 0, bytesRead));
-
-                        if (messageBuilder.ToString().EndsWith(";;;"))
-                        {
-                            string completeMessage = messageBuilder.ToString().TrimEnd(';');
-                            lock (_messageLock)
-                            {
-                                _lastMessage = completeMessage;
-                            }
-                            messageBuilder.Clear();
-                        }
-                    }
+                    responses.Add(message);
                 }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Błąd odbierania wiadomości: {ex.Message}");
-            }
         }
-
-        public void Disconnect()
+        catch (Exception ex)
         {
-            try
-            {
-                _receiveThread?.Abort();
-                _stream?.Close();
-                _client?.Close();
-                Console.WriteLine("Rozłączono z serwerem.");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Błąd podczas rozłączania: {ex.Message}");
-            }
+            Console.WriteLine("Błąd odbierania wiadomości: " + ex.Message);
         }
+        finally
+        {
+            Disconnect();
+        }
+    }
+
+    // Zakończenie połączenia
+    public void Disconnect()
+    {
+        if (IsConnected)
+        {
+            _reader.Close();
+            _writer.Close();
+            _stream.Close();
+            _tcpClient.Close();
+
+            IsConnected = false;
+            Console.WriteLine("Połączenie zakończone.");
+        }
+        else
+        {
+            Console.WriteLine("Brak aktywnego połączenia.");
+        }
+    }
+
+    public Task<string> WaitForResponseAsync()
+    {
+        var tcs = new TaskCompletionSource<string>();
+
+        Task.Run(() =>
+        {
+            while (!responses.Any()) 
+            {
+                Task.Delay(10).Wait();
+            }
+            tcs.SetResult(responses.Last());
+        });
+
+        return tcs.Task;
     }
 }

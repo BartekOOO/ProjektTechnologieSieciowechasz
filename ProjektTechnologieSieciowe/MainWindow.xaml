@@ -5,8 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProjektTechnologieSieciowe"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="MainWindow" Height="400" Width="300"
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid Margin="20,5,20,5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.4*"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Content="Logowanie" Grid.Row="1" HorizontalAlignment="Center"/>
+        <GroupBox Grid.Row="2" Header="Login">
+            <TextBox Padding="3" x:Name="LoginTextBox"/>
+        </GroupBox>
+        <GroupBox Header="Hasło" Grid.Row="3">
+            <PasswordBox Padding="3" x:Name="HasloPasswordBox"/>
+        </GroupBox>
+        <Button Click="LogowanieButton_Click" Margin="0,15,0,0" HorizontalContentAlignment="Center" Padding="10,5,10,5" HorizontalAlignment="Center" x:Name="LogowanieButton" Content="Zaloguj się" Grid.Row="4"/>
     </Grid>
 </Window>
