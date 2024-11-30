@@ -10,19 +10,10 @@ namespace TechnologieSiecioweLibrary.Models
 {
     public class Token : IData
     {
-        public int UserId { get; set; }
         public string TokenBW
         {
-            get
-            {
-                return Kodek.Encrypt($"Token;ABC;{UserId};ABC;{ExpirationDate};ABC");
-            }
-            set
-            {
-                TokenBW = value;
-            }
+            get;set;
         }
-        public DateTime ExpirationDate { get; set; }
 
         public string GetClassName()
         {
@@ -37,9 +28,7 @@ namespace TechnologieSiecioweLibrary.Models
         public void ReadDataFromJSON(string JSONBody)
         {
             Token result = JsonSerializer.Deserialize<Token>(JSONBody);
-            this.UserId = result.UserId;
             this.TokenBW = result.TokenBW;
-            this.ExpirationDate = result.ExpirationDate;
         }
     }
 }

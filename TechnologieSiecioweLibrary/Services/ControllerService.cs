@@ -27,6 +27,8 @@ namespace TechnologieSiecioweLibrary.Services
                         return new UserController().ProcessData(jsonData.ToString(),method).Result;
                     case "Token":
                         return new TokenController().ProcessData(jsonData.ToString(),method).Result;
+                    case "Message":
+                        return new MsgController().ProcessData(jsonData.ToString(),method).Result;
                 }
             }
 

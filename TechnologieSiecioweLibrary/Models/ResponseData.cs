@@ -30,5 +30,12 @@ namespace TechnologieSiecioweLibrary.Models
             return JsonSerializer.Serialize(this);
         }
 
+        public void ReadDataFromJSON(string JSONBody)
+        {
+            ResponseData<T> result = JsonSerializer.Deserialize<ResponseData<T>>(JSONBody);
+            this.Data = result.Data;
+            this.ResponseCode = result.ResponseCode;
+        }
+
     }
 }

@@ -22,10 +22,10 @@ namespace TechnologieSiecioweLibrary.Enums
         BAD_REQUEST = 400,
 
         [Description("Brak autoryzacji - brak wymaganych uprawnień.")]
-        UNAUTHORIZED = 401,
+        UNAUTHORIZED = 402,
 
         [Description("Błąd rejestracji - użytkownik z tą nazwą już istnieje")]
-        USER_ALREADY_EXISTS,
+        USER_ALREADY_EXISTS = 600,
 
         [Description("Zabronione - brak dostępu do zasobu.")]
         FORBIDDEN = 403,
