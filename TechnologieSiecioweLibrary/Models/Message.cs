@@ -16,6 +16,7 @@ namespace TechnologieSiecioweLibrary.Models
         public int ReceiverId { get; set; }
         public string MessageText { get; set; }
         public DateTime Date { get; set; }
+        public string DateString => DateTimeHelper.FormatDateTime(Date);
 
         public string SenderName { get; set; } = "";
         

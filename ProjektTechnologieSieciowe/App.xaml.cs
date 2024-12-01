@@ -40,7 +40,7 @@ namespace ProjektTechnologieSieciowe
                 if(window is GlowneOkno)
                 {
                     GlowneOkno okno = (GlowneOkno)window;
-                    okno.DaneMenuItem2.Header = $"Sesja wygaśnie: {DateTimeHelper.FormatDateTime2(Config.token.ExpirationDate)}" +
+                    okno.DaneMenuItem2.Header = $"Sesja wygaśnie o {DateTimeHelper.FormatDateTime2(Config.token.ExpirationDate)}" +
                         $"({DateTimeHelper.FormatDateTime3(SessionManager.GetRemainingTime())})";
                 }
             }

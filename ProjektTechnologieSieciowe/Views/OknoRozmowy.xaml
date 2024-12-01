@@ -30,7 +30,11 @@
                                    FontWeight="Bold"
                                    Foreground="Gray"/>
                         <TextBlock Text="{Binding MessageText}" 
-                                   TextWrapping="Wrap"/>
+                                   TextWrapping="Wrap"
+                                   MaxWidth="780"/>
+                        <TextBlock Text="{Binding DateString}" 
+                                   FontSize="10" 
+                                   Foreground="Gray"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>

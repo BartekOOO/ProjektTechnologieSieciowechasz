@@ -81,7 +81,7 @@ namespace ProjektTechnologieSieciowe.Views
                     if (responseData.Data != null)
                     {
                         Messages.Add(responseData.Data);
-                        ChatListBox.ScrollIntoView(responseData.Data); // Automatyczny scroll
+                        ChatListBox.ScrollIntoView(responseData.Data);
                     }
                 }
                 catch (Exception ex)
@@ -116,7 +116,7 @@ namespace ProjektTechnologieSieciowe.Views
 
         private void MessageTextBox_KeyDown(object sender, KeyEventArgs e)
         {
-            if(e.Key== Key.Enter)
+            if(e.Key == Key.Enter)
             {
                 Button_Click(null,null);
             }

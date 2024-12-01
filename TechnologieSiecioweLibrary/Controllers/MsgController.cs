@@ -30,6 +30,7 @@ namespace TechnologieSiecioweLibrary.Controllers
 
                     Message msgtosend = new Message();
                     msgtosend.ReadDataFromJSON(json);
+                    msgtosend.Date = DateTime.Now;
                     msgtosend.SenderId = token.GetTokenData().Item2;
                     msgtosend.SenderName = token.GetTokenData().Item3;
 
