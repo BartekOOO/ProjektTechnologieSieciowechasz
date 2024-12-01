@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -22,6 +23,21 @@ namespace TechnologieSiecioweLibrary.Models
         public string GetClassName()
         {
             return "Message";
+        }
+
+        public Message()
+        {
+
+        }
+
+        public Message(DataRow row)
+        {
+            this.Id = row.Field<int>("PMS_Id");
+            this.SenderId = row.Field<int>("PMS_SenderId");
+            this.ReceiverId = row.Field<int>("PMS_ReceiverId");
+            this.MessageText = row.Field<string>("PMS_Message");
+            this.Date = row.Field<DateTime>("PMS_Date");
+            this.SenderName = row.Field<string>("PUS_UserName");
         }
 
         public Dictionary<string, object> GetInsertParameters()

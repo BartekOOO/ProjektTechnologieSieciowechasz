@@ -62,5 +62,18 @@ namespace ProjektTechnologieSieciowe
         {
 
         }
+
+        private void WylogujClick(object sender, RoutedEventArgs e)
+        {
+            MainWindow logowanie = new MainWindow();
+            logowanie.Show();
+            this.Close();
+            Config.token = null;
+        }
+
+        private void WlaczOgolnaKonwersacjeClick(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

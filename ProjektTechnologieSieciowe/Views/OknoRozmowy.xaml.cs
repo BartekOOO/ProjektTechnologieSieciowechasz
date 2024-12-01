@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,20 +24,44 @@ namespace ProjektTechnologieSieciowe.Views
     public partial class OknoRozmowy : UserControl
     {
         public ObservableCollection<Message> Messages { get; set; }
+        public int ReceiverId { get; set; } = 0;
+        public int SenderId { get; set; } = 0;
+        public Client Client { get; set; }
+
         public OknoRozmowy()
         {
             InitializeComponent();
             Messages = new ObservableCollection<Message>();
 
-            this.DataContext = this;
+            LoadData();
+            
+        }
 
-            Messages.Add(new Message() { SenderName = "Bartek", MessageText = "Halo halo"});
-            Messages.Add(new Message() { SenderName = "Mikołaj", MessageText = "Gówno" });
-            Messages.Add(new Message() { SenderName = "Bartek", MessageText = "Dupa" });
-            Messages.Add(new Message() { SenderName = "Bartek", MessageText = "Dupa" });
-            Messages.Add(new Message() { SenderName = "Bartek", MessageText = "Dupa" });
-            Messages.Add(new Message() { SenderName = "Bartek", MessageText = "Dupa" });
-            Messages.Add(new Message() { SenderName = "Bartek", MessageText = "Dupa" });
+        public async Task LoadData()
+        {
+            this.DataContext = this;
+            Client = new Client();
+            Client.Connect(Config.host, Config.port);
+
+            List<Message> messages = new List<Message>();
+
+            RequestData<Message> reqmsg = new RequestData<Message>();
+            reqmsg.Data = new Message();
+            reqmsg.Method = TechnologieSiecioweLibrary.Enums.Method.List;
+            reqmsg.Token = Config.token;
+
+            Client.SendData(reqmsg.GetJSONBody());
+
+            var result = await Client.WaitForResponseAsync();
+
+            ResponseData<List<Message>> resp = new ResponseData<List<Message>>();
+            resp.ReadDataFromJSON(result);
+
+            foreach (Message message in resp.Data)
+            {
+                messages.Add(message);
+            }
+
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Runtime.Remoting.Contexts;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using TechnologieSiecioweLibrary.Enums;
 using TechnologieSiecioweLibrary.Interfaces;
@@ -19,9 +21,38 @@ namespace TechnologieSiecioweLibrary.Controllers
                 case Method.Post:
                     ResponseData<Message> responseData = new ResponseData<Message>();
                     responseData.Data = new Message();
-                    responseData.Data.MessageText = "Zajebiscie";
+                    responseData.Data.MessageText = "";
                     responseData.ResponseCode = ResponseCode.OK;
                     return responseData.GetJSONBody();
+                case Method.List:
+                    if (!token.CheckToken())
+                    {
+                        ResponseData<List<Message>> notAuthorizedRsponse = new ResponseData<List<Message>>();
+                        notAuthorizedRsponse.Data = null;
+                        notAuthorizedRsponse.ResponseCode = ResponseCode.UNAUTHORIZED;
+                        return JsonSerializer.Serialize(notAuthorizedRsponse);
+                    }
+
+                    
+                    Message msg = new Message();
+                    msg.ReadDataFromJSON(json);
+                    
+
+                    DataTable messages = await DatabaseHelper.ExecuteStoredProcedureWithResult(
+                        $"PROJEKT.GetMessages",
+                        new Dictionary<string, object> { { "@SenderId", token.GetTokenData().Item2 }, { "@ReceiverId", msg.ReceiverId } },
+                        new ConfigS());
+                    List<Message> result = new List<Message>();
+                    foreach(DataRow message in messages.Rows)
+                    {
+                        result.Add(new Message(message));
+                    }
+                    ResponseData<List<Message>> responseMessages = new ResponseData<List<Message>>();
+                    responseMessages.Data = result;
+                    responseMessages.ResponseCode = ResponseCode.OK;
+                    return JsonSerializer.Serialize(responseMessages);
+
+
                 default:
 
                     break;

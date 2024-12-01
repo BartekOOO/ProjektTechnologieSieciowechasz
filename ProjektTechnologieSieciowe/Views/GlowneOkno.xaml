@@ -16,9 +16,10 @@
                 <MenuItem Header="Zmień hasło"/>
                 <MenuItem Header="Ustawienia konta"/>
                 <Separator/>
-                <MenuItem Header="Wyloguj"/>
+                <MenuItem Click="WylogujClick" Header="Wyloguj"/>
             </MenuItem>
             <MenuItem Header="Wiadomości">
+                <MenuItem Click="WlaczOgolnaKonwersacjeClick" Header="Włącz ogólną konwersację"/>
                 <MenuItem Click="NowaKonwersacjaClick" Header="Nowa konwersacja"/>
                 <MenuItem Click="ZakonczKonwersacjeClick" Header="Zakończ konwersację"/>
             </MenuItem>

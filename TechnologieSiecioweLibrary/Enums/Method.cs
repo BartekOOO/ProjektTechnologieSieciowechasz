@@ -13,6 +13,7 @@ namespace TechnologieSiecioweLibrary.Enums
         Put,
         Delete,
         Login,
-        Logut
+        Logout,
+        List
     }
 }

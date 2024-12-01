@@ -12,14 +12,10 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-
-       
         <ListBox Grid.Row="0" Name="ChatListBox" 
                  ItemsSource="{Binding Messages}"
                  Background="White"
                  BorderThickness="0"
-                 
-                 
                  >
             <ListBox.Resources>
                 <Style TargetType="ListBoxItem">
