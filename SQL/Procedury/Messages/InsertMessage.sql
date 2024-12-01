@@ -4,7 +4,7 @@ CREATE OR ALTER PROCEDURE [PROJEKT].[InsertMessage]
 @Message VARCHAR(MAX)
 AS
 BEGIN
-	INSERT INTO [PROJEKT].[Message]
+	INSERT INTO [PROJEKT].[Messages]
 	(PMS_SenderId,PMS_ReceiverId,PMS_Message,PMS_Date)
 	VALUES 
 	(@SenderId,@ReceiverId,@Message,GETDATE())

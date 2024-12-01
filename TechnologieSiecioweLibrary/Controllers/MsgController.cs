@@ -19,9 +19,30 @@ namespace TechnologieSiecioweLibrary.Controllers
             switch (method)
             {
                 case Method.Post:
+                    if (!token.CheckToken())
+                    {
+                        ResponseData<List<Message>> notAuthorizedRsponse = new ResponseData<List<Message>>();
+                        notAuthorizedRsponse.Data = null;
+                        notAuthorizedRsponse.ResponseCode = ResponseCode.UNAUTHORIZED;
+                        return JsonSerializer.Serialize(notAuthorizedRsponse);
+                    }
                     ResponseData<Message> responseData = new ResponseData<Message>();
-                    responseData.Data = new Message();
-                    responseData.Data.MessageText = "";
+
+                    Message msgtosend = new Message();
+                    msgtosend.ReadDataFromJSON(json);
+                    msgtosend.SenderId = token.GetTokenData().Item2;
+
+                    await DatabaseHelper.ExecuteStoredProcedure(
+                        $"PROJEKT.InsertMessage",
+                        new Dictionary<string,object>()
+                        {
+                            { "@SenderId", msgtosend.SenderId },
+                            { "@ReceiverId", msgtosend.ReceiverId },
+                            { "@Message", msgtosend.MessageText }
+                        },new ConfigS());
+
+
+                    responseData.Data = msgtosend;
                     responseData.ResponseCode = ResponseCode.OK;
                     return responseData.GetJSONBody();
                 case Method.List:

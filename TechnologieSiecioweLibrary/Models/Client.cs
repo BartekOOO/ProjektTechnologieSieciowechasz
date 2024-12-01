@@ -16,6 +16,8 @@ public class Client
     private Thread _receiveThread;
     public List<string> responses;
 
+    public Action<string> NewData;
+
     public bool IsConnected { get; private set; } = false;
 
     public Client()
@@ -24,7 +26,6 @@ public class Client
         responses = new List<string>();
     }
 
-    // Rozpoczęcie połączenia z serwerem
     public void Connect(string serverAddress, int port)
     {
         try
@@ -36,7 +37,6 @@ public class Client
 
             IsConnected = true;
 
-            // Uruchomienie wątku odbierającego wiadomości
             _receiveThread = new Thread(ReceiveMessages);
             _receiveThread.Start();
 
@@ -49,7 +49,6 @@ public class Client
         }
     }
 
-    // Wysyłanie wiadomości do serwera
     public void SendData(string data)
     {
         if (IsConnected)
@@ -70,7 +69,7 @@ public class Client
         }
     }
 
-    // Odbieranie wiadomości od serwera i ich wyświetlanie na konsoli
+    
     private void ReceiveMessages()
     {
         try
@@ -81,6 +80,7 @@ public class Client
                 if (message != null)
                 {
                     responses.Add(message);
+                    NewData?.Invoke(message);
                 }
             }
         }
@@ -94,7 +94,7 @@ public class Client
         }
     }
 
-    // Zakończenie połączenia
+    
     public void Disconnect()
     {
         if (IsConnected)

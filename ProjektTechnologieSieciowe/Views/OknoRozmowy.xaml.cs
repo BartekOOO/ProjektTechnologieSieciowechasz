@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using TechnologieSiecioweLibrary.Models;
 
 namespace ProjektTechnologieSieciowe.Views
@@ -27,6 +28,7 @@ namespace ProjektTechnologieSieciowe.Views
         public int ReceiverId { get; set; } = 0;
         public int SenderId { get; set; } = 0;
         public Client Client { get; set; }
+       
 
         public OknoRozmowy()
         {
@@ -59,19 +61,51 @@ namespace ProjektTechnologieSieciowe.Views
 
             foreach (Message message in resp.Data)
             {
-                messages.Add(message);
+                Messages.Add(message);
             }
 
+            Client.NewData += AddNewMessage;
+
         }
+
+        public async void AddNewMessage(string message)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                try
+                {
+                    ResponseData<Message> responseData = new ResponseData<Message>();
+                    responseData.ReadDataFromJSON(message);
+
+                    if (responseData.Data != null)
+                    {
+                        Messages.Add(responseData.Data);
+                        ChatListBox.ScrollIntoView(responseData.Data); // Automatyczny scroll
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Błąd podczas przetwarzania nowej wiadomości: " + ex.Message);
+                }
+            });
+        }
+
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             if (!String.IsNullOrEmpty(MessageTextBox.Text))
             {
-                Message newMessage = new Message() { SenderName = "Bartek", MessageText = MessageTextBox.Text };
-                Messages.Add(newMessage);
+                Message newMessage = new Message() { MessageText = MessageTextBox.Text };
+                
                 ChatListBox.ScrollIntoView(newMessage);
                 MessageTextBox.Clear();
+
+                RequestData<Message> messageToSend = new RequestData<Message>();
+                messageToSend.Data = newMessage;
+                messageToSend.Method = TechnologieSiecioweLibrary.Enums.Method.Post;
+                messageToSend.Token = Config.token;
+
+                Client.SendData(messageToSend.GetJSONBody());
             }
             else
             {
