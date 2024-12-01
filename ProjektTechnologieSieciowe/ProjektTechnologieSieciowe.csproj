@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="SessonManager.cs" />
     <Compile Include="Views\OknoRozmowy.xaml.cs">
       <DependentUpon>OknoRozmowy.xaml</DependentUpon>
     </Compile>

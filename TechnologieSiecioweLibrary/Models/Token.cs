@@ -15,17 +15,21 @@ namespace TechnologieSiecioweLibrary.Models
             get; set;
         }
 
+        public DateTime ExpirationDate { get; set; }
+
         public Token()
         {
             //TokenBW = $"TOKENBW;ABC;{0};ABC;{DateTime.Now.AddMinutes(-15000)};ABC;";
+            ExpirationDate = DateTime.Now.AddMinutes(-15000);
             TokenBW = Kodek.Encrypt(
-                        $"TOKENBW;ABC;{0};ABC;{DateTime.Now.AddMinutes(-15000)};ABC;Unauthorized");
+                        $"TOKENBW;ABC;{0};ABC;{ExpirationDate};ABC;Unauthorized");
         }
         public Token(int id, int time,string login)
         {
 
+            ExpirationDate = DateTime.Now.AddMinutes(time);
             TokenBW = Kodek.Encrypt(
-                        $"TOKENBW;ABC;{id};ABC;{DateTime.Now.AddMinutes(15)};ABC;{login}");
+                        $"TOKENBW;ABC;{id};ABC;{ExpirationDate};ABC;{login}");
 
             //TokenBW = $"TOKENBW;ABC;{id};ABC;{DateTime.Now.AddMinutes(15)};ABC;";
         }
@@ -68,6 +72,7 @@ namespace TechnologieSiecioweLibrary.Models
         {
             Token result = JsonSerializer.Deserialize<Token>(JSONBody);
             this.TokenBW = result.TokenBW;
+            this.ExpirationDate = result.ExpirationDate;
         }
     }
 }

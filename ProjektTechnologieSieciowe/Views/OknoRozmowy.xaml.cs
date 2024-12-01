@@ -77,6 +77,7 @@ namespace ProjektTechnologieSieciowe.Views
                     ResponseData<Message> responseData = new ResponseData<Message>();
                     responseData.ReadDataFromJSON(message);
 
+
                     if (responseData.Data != null)
                     {
                         Messages.Add(responseData.Data);

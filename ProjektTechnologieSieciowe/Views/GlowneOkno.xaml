@@ -24,6 +24,7 @@
                 <MenuItem Click="ZakonczKonwersacjeClick" Header="Zakończ konwersację"/>
             </MenuItem>
             <MenuItem x:Name="DaneMenuItem"></MenuItem>
+            <MenuItem x:Name="DaneMenuItem2"></MenuItem>
         </Menu>
         <Grid Grid.Row="1" x:Name="MainGrid">
 

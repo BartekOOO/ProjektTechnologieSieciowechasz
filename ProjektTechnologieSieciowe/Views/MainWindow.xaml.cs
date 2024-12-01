@@ -53,6 +53,7 @@ namespace ProjektTechnologieSieciowe
             if (responseData.ResponseCode == TechnologieSiecioweLibrary.Enums.ResponseCode.OK)
             {
                 Config.token = responseData.Data;
+                SessionManager.SessionExpiration = Config.token.ExpirationDate;
                 GlowneOkno okno = new GlowneOkno();
                 okno.Show();
                 this.Close();

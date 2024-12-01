@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TechnologieSiecioweLibrary;
 using TechnologieSiecioweLibrary.Models;
 
 namespace ProjektTechnologieSieciowe
@@ -42,6 +43,7 @@ namespace ProjektTechnologieSieciowe
             userDetails.ReadDataFromJSON(resuet);
 
             DaneMenuItem.Header = $"Zalogowano jako: {userDetails.Data.UserName}";
+            DaneMenuItem2.Header = $"Sesja aktywna do: {DateTimeHelper.FormatDateTime2(Config.token.ExpirationDate)}";
 
             client.Disconnect();
         }

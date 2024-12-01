@@ -117,7 +117,7 @@ namespace TechnologieSiecioweLibrary.Controllers
                         int id = row.Field<int>("PUS_Id");
                         string login = row.Field<string>("PUS_UserName");
 
-                        Token newToken = new Token(id, 15, login);
+                        Token newToken = new Token(id, 20, login);
 
                         await DatabaseHelper.ExecuteStoredProcedure(
                             $"PROJEKT.UpdateUserLastLogin",
