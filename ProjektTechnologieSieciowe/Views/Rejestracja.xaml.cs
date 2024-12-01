@@ -20,6 +20,7 @@ namespace ProjektTechnologieSieciowe.Views
         public Rejestracja()
         {
             InitializeComponent();
+            LoginTextBox.Focus();
         }
 
         private async void Rejestracja_Click(object sender, RoutedEventArgs e)

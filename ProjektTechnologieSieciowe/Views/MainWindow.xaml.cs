@@ -18,14 +18,12 @@ using TechnologieSiecioweLibrary.Models;
 
 namespace ProjektTechnologieSieciowe
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
+            LoginTextBox.Focus();
         }
 
         private async void LogowanieButton_Click(object sender, RoutedEventArgs e)
@@ -70,6 +68,14 @@ namespace ProjektTechnologieSieciowe
             Rejestracja rejestracjaOkno = new Rejestracja();
             rejestracjaOkno.Show();
             this.Close();
+        }
+
+        private void HasloPasswordBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                LogowanieButton_Click(null,null);
+            }
         }
     }
 }
