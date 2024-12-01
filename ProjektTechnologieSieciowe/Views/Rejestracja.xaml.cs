@@ -15,9 +15,6 @@ using TechnologieSiecioweLibrary.Models;
 
 namespace ProjektTechnologieSieciowe.Views
 {
-    /// <summary>
-    /// Interaction logic for Rejestracja.xaml
-    /// </summary>
     public partial class Rejestracja : Window
     {
         public Rejestracja()
@@ -27,10 +24,11 @@ namespace ProjektTechnologieSieciowe.Views
 
         private async void Rejestracja_Click(object sender, RoutedEventArgs e)
         {
-            string login, password, email;
+            string login, password, email, country;
             login = LoginTextBox.Text;
             password = HasloPasswordBox.Password;
             email = AdresEmailTextBox.Text;
+            country = KrajTextBox.Text;
 
             if(String.IsNullOrEmpty(login)||
                 String.IsNullOrEmpty(password))
@@ -40,7 +38,7 @@ namespace ProjektTechnologieSieciowe.Views
             }
 
             RequestData<User> requestNewUser = new RequestData<User>();
-            requestNewUser.Data = new User() { UserName = login, Email = email, Password = password };
+            requestNewUser.Data = new User() { UserName = login, Email = email, Password = password, Country = country };
             requestNewUser.Method = TechnologieSiecioweLibrary.Enums.Method.Post;
 
             Client client = new Client();

@@ -15,6 +15,7 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Label Content="Rejestracja" Grid.Row="1" HorizontalAlignment="Center"/>
@@ -27,7 +28,10 @@
         <GroupBox Header="Adres email" Grid.Row="4">
             <TextBox Padding="3" x:Name="AdresEmailTextBox"/>
         </GroupBox>
-        <Button Click="Rejestracja_Click" Margin="0,15,0,0" HorizontalContentAlignment="Center" Padding="10,5,10,5" HorizontalAlignment="Center" x:Name="RejestracjaButton" Content="Zarejestruj się" Grid.Row="5"/>
-        <Label Content="Anuluj" Cursor="Hand" MouseDown="Label_MouseDown" Foreground="Blue" HorizontalAlignment="Center" Grid.Row="6"/>
+        <GroupBox Header="Kraj" Grid.Row="5">
+            <TextBox Padding="3" x:Name="KrajTextBox"/>
+        </GroupBox>
+        <Button Click="Rejestracja_Click" Margin="0,15,0,0" HorizontalContentAlignment="Center" Padding="10,5,10,5" HorizontalAlignment="Center" x:Name="RejestracjaButton" Content="Zarejestruj się" Grid.Row="6"/>
+        <Label Content="Anuluj" Cursor="Hand" MouseDown="Label_MouseDown" Foreground="Blue" HorizontalAlignment="Center" Grid.Row="7"/>
     </Grid>
 </Window>

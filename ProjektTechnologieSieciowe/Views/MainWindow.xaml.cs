@@ -34,7 +34,7 @@ namespace ProjektTechnologieSieciowe
             login = LoginTextBox.Text;
             password = HasloPasswordBox.Password;
 
-            User user = new User(0,login,password,"");
+            User user = new User(0,login,password,"",DateTime.Now,DateTime.Now,null,null);
 
             RequestData<User> requestData = new RequestData<User>();
             requestData.Data = user;

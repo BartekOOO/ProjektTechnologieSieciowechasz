@@ -19,13 +19,13 @@ namespace TechnologieSiecioweLibrary.Models
         {
             //TokenBW = $"TOKENBW;ABC;{0};ABC;{DateTime.Now.AddMinutes(-15000)};ABC;";
             TokenBW = Kodek.Encrypt(
-                        $"TOKENBW;ABC;{0};ABC;{DateTime.Now.AddMinutes(-15000)};ABC;");
+                        $"TOKENBW;ABC;{0};ABC;{DateTime.Now.AddMinutes(-15000)};ABC;Unauthorized");
         }
-        public Token(int id, int time)
+        public Token(int id, int time,string login)
         {
 
             TokenBW = Kodek.Encrypt(
-                        $"TOKENBW;ABC;{id};ABC;{DateTime.Now.AddMinutes(15)};ABC;");
+                        $"TOKENBW;ABC;{id};ABC;{DateTime.Now.AddMinutes(15)};ABC;{login}");
 
             //TokenBW = $"TOKENBW;ABC;{id};ABC;{DateTime.Now.AddMinutes(15)};ABC;";
         }
@@ -45,7 +45,7 @@ namespace TechnologieSiecioweLibrary.Models
             return this.GetTokenData().Item1 > DateTime.Now;
         }
 
-        public Tuple<DateTime, int> GetTokenData()
+        public Tuple<DateTime, int, string> GetTokenData()
         {
             string decryptedData = "";
 
@@ -60,8 +60,8 @@ namespace TechnologieSiecioweLibrary.Models
 
             int userId = int.Parse(dataParts[1]);
             DateTime expirationDate = DateTime.Parse(dataParts[2]);
-
-            return new Tuple<DateTime, int>(expirationDate, userId);
+            string login = dataParts[3];
+            return new Tuple<DateTime, int, string>(expirationDate, userId, login);
         }
 
         public void ReadDataFromJSON(string JSONBody)

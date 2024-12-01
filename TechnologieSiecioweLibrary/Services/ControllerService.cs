@@ -40,8 +40,6 @@ namespace TechnologieSiecioweLibrary.Services
                 {
                     case "User":
                         return await new UserController().ProcessData(jsonData.ToString(),method,token);
-                    case "Token":
-                        return await new TokenController().ProcessData(jsonData.ToString(),method, token);
                     case "Message":
                         return await new MsgController().ProcessData(jsonData.ToString(),method, token);
 

@@ -1,0 +1,9 @@
+CREATE OR ALTER PROCEDURE [PROJEKT].[UpdateUserLastLogin]
+@Id INT
+AS
+BEGIN
+	UPDATE [PROJEKT].[Users] SET
+	PUS_LastLogin = GETDATE()
+	WHERE PUS_Id = @Id
+END
+GO

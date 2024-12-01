@@ -27,6 +27,10 @@ namespace TechnologieSiecioweLibrary.Models
             }
         }
         public string Email { get; set; } = "";
+        public DateTime RegistrationDate { get; set; }
+        public DateTime LastLogin { get; set; }
+        public string Bio { get; set; }
+        public string Country { get; set; }
 
         public User()
         {
@@ -39,14 +43,22 @@ namespace TechnologieSiecioweLibrary.Models
             this.Email = row.Field<string>("PUS_EMAIL");
             this.UserName = row.Field<string>("PUS_UserName");
             this.EncryptedPassword = row.Field<string>("PUS_Password");
+            this.RegistrationDate = row.Field<DateTime>("PUS_RegistrationDate");
+            this.LastLogin = row.Field<DateTime>("PUS_LastLogin");
+            this.Bio = row.Field<string>("PUS_Bio");
+            this.Country = row.Field<string>("PUS_Country");
         }
 
-        public User(int id, string userName, string password, string email)
+        public User(int id, string userName, string password, string email, DateTime registrationDate, DateTime lastLogin, string bio, string country)
         {
             this.Id = id;
             this.Email = email;
             this.UserName = userName;
             this.Password = password;
+            this.RegistrationDate = registrationDate;
+            this.LastLogin = lastLogin;
+            this.Bio = bio;
+            this.Country = country;
         }
 
         public Dictionary<string, object> GetInsertParameters()
@@ -55,6 +67,10 @@ namespace TechnologieSiecioweLibrary.Models
             paramsDict.Add("@UserName", this.UserName);
             paramsDict.Add("@Email", this.Email);
             paramsDict.Add("@Password", this.EncryptedPassword);
+            paramsDict.Add("@RegistrationDate", DateTime.Now);
+            paramsDict.Add("@LastLogin", DateTime.Now);
+            paramsDict.Add("@Bio", this.Bio);
+            paramsDict.Add("@Country", this.Country);
             return paramsDict;
         }
 

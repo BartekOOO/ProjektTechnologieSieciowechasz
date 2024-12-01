@@ -24,7 +24,6 @@ namespace TechnologieSiecioweLibrary.Controllers
                     case Method.Post:
                         User newUser = JsonSerializer.Deserialize<User>(json);
 
-                        // Sprawdzanie, czy użytkownik już istnieje
                         DataTable dt = await DatabaseHelper.ExecuteStoredProcedureWithResult(
                             $"PROJEKT.UserExists", new Dictionary<string, object> { { "@UserName", newUser.UserName } }, new ConfigS());
 
@@ -38,7 +37,6 @@ namespace TechnologieSiecioweLibrary.Controllers
                             return JsonSerializer.Serialize(badResult);
                         }
 
-                        // Sprawdzanie, czy dane użytkownika są poprawne
                         if (string.IsNullOrEmpty(newUser.UserName) || string.IsNullOrEmpty(newUser.Password) || newUser == null)
                         {
                             ResponseData<User> badResult = new ResponseData<User>
@@ -49,7 +47,6 @@ namespace TechnologieSiecioweLibrary.Controllers
                             return JsonSerializer.Serialize(badResult);
                         }
 
-                        // Dodanie użytkownika
                         await DatabaseHelper.ExecuteStoredProcedure(
                             $"PROJEKT.InsertUser", newUser.GetInsertParameters(), new ConfigS());
 
@@ -105,6 +102,7 @@ namespace TechnologieSiecioweLibrary.Controllers
                                 { "@Password", Kodek.Encrypt(loginRequest.Password) }
                             }, new ConfigS());
 
+
                         if (dtl.Rows.Count == 0)
                         {
                             ResponseData<Token> badResult = new ResponseData<Token>
@@ -117,8 +115,13 @@ namespace TechnologieSiecioweLibrary.Controllers
 
                         DataRow row = dtl.Rows[0];
                         int id = row.Field<int>("PUS_Id");
+                        string login = row.Field<string>("PUS_UserName");
 
-                        Token newToken = new Token(id, 15);
+                        Token newToken = new Token(id, 15, login);
+
+                        await DatabaseHelper.ExecuteStoredProcedure(
+                            $"PROJEKT.UpdateUserLastLogin",
+                            new Dictionary<string, object> { { "@Id", id } }, new ConfigS());
 
 
                         loginResponse.Data = newToken;
