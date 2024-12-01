@@ -46,6 +46,8 @@ namespace ProjektTechnologieSieciowe
             DaneMenuItem2.Header = $"Sesja aktywna do: {DateTimeHelper.FormatDateTime2(Config.token.ExpirationDate)}";
 
             client.Disconnect();
+
+
         }
 
         private void NowaKonwersacjaClick(object sender, RoutedEventArgs e)

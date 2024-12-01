@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Remoting.Channels;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -64,6 +65,7 @@ namespace ProjektTechnologieSieciowe.Views
                 Messages.Add(message);
             }
 
+            ChatListBox.ScrollIntoView(Messages.Last());
             Client.NewData += AddNewMessage;
 
         }
@@ -88,6 +90,7 @@ namespace ProjektTechnologieSieciowe.Views
                 {
                     Console.WriteLine("Błąd podczas przetwarzania nowej wiadomości: " + ex.Message);
                 }
+                ChatListBox.ScrollIntoView(Messages.Last());
             });
         }
 
