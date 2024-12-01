@@ -5,8 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ProjektTechnologieSieciowe"
         mc:Ignorable="d"
-        Title="GlowneOkno" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Height="450" Width="800">
+        Title="Komunikator" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Height="450" Width="800">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0">
+            <MenuItem Header="Konto">
+                <MenuItem Header="Zmień hasło"/>
+                <MenuItem Header="Ustawienia konta"/>
+                <Separator/>
+                <MenuItem Header="Wyloguj"/>
+            </MenuItem>
+            <MenuItem Header="Wiadomości">
+                <MenuItem Click="NowaKonwersacjaClick" Header="Nowa konwersacja"/>
+                <MenuItem Click="ZakonczKonwersacjeClick" Header="Zakończ konwersację"/>
+            </MenuItem>
+            <MenuItem x:Name="DaneMenuItem"></MenuItem>
+        </Menu>
+        <Grid Grid.Row="1" x:Name="MainGrid">
+
+
+        </Grid>
     </Grid>
 </Window>

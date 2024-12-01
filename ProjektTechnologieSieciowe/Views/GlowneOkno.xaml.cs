@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ProjektTechnologieSieciowe.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,17 +16,12 @@ using TechnologieSiecioweLibrary.Models;
 
 namespace ProjektTechnologieSieciowe
 {
-    /// <summary>
-    /// Interaction logic for GlowneOkno.xaml
-    /// </summary>
     public partial class GlowneOkno : Window
     {
         public GlowneOkno()
         {
             InitializeComponent();
-
             LoadUserData();
-
         }
 
         public async Task LoadUserData()
@@ -45,9 +41,26 @@ namespace ProjektTechnologieSieciowe
             ResponseData<User> userDetails = new ResponseData<User>();
             userDetails.ReadDataFromJSON(resuet);
 
-           
+            DaneMenuItem.Header = $"Zalogowano jako: {userDetails.Data.UserName}";
 
-            MessageBox.Show($"Zalogowano jako: {userDetails.Data.UserName}, {userDetails.Data.Email}");
+            client.Disconnect();
+        }
+
+        private void NowaKonwersacjaClick(object sender, RoutedEventArgs e)
+        {
+            OknoRozmowy konwersacja = new OknoRozmowy();
+            MainGrid.Children.Clear();
+            MainGrid.Children.Add(konwersacja);
+        }
+
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ZakonczKonwersacjeClick(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

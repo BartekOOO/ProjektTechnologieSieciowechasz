@@ -16,6 +16,8 @@ namespace TechnologieSiecioweLibrary.Models
         public string MessageText { get; set; }
         public DateTime Date { get; set; }
 
+        public string SenderName { get; set; } = "";
+        
 
         public string GetClassName()
         {

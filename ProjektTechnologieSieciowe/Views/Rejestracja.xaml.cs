@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using TechnologieSiecioweLibrary.Models;
 
 namespace ProjektTechnologieSieciowe.Views
 {
@@ -24,7 +25,7 @@ namespace ProjektTechnologieSieciowe.Views
             InitializeComponent();
         }
 
-        private void Rejestracja_Click(object sender, RoutedEventArgs e)
+        private async void Rejestracja_Click(object sender, RoutedEventArgs e)
         {
             string login, password, email;
             login = LoginTextBox.Text;
@@ -37,6 +38,38 @@ namespace ProjektTechnologieSieciowe.Views
                 MessageBox.Show("Wymagane pola nie zostały uzupełnione");
                 return;
             }
+
+            RequestData<User> requestNewUser = new RequestData<User>();
+            requestNewUser.Data = new User() { UserName = login, Email = email, Password = password };
+            requestNewUser.Method = TechnologieSiecioweLibrary.Enums.Method.Post;
+
+            Client client = new Client();
+            client.Connect(Config.host, Config.port);
+
+            client.SendData(requestNewUser.GetJSONBody());
+
+            var result = await client.WaitForResponseAsync();
+
+            ResponseData<User> responseUser = new ResponseData<User>();
+            responseUser.ReadDataFromJSON(result);
+
+            if (responseUser.ResponseCode == TechnologieSiecioweLibrary.Enums.ResponseCode.CREATED)
+            {
+                MessageBox.Show("Pomyślnie dodano nowego użytkownika");
+                MainWindow mainWindow = new MainWindow();
+                mainWindow.Show();
+                this.Close();
+            }
+            else if (responseUser.ResponseCode == TechnologieSiecioweLibrary.Enums.ResponseCode.USER_ALREADY_EXISTS)
+            {
+                MessageBox.Show("Użytkownik o podanym loginie już istnieje");
+            }
+            else
+            {
+                MessageBox.Show("Nastąpił nieoczekiwany błąd");
+            }
+
+            client.Disconnect();
         }
 
         private void Label_MouseDown(object sender, MouseButtonEventArgs e)

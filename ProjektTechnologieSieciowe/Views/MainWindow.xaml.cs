@@ -56,11 +56,10 @@ namespace ProjektTechnologieSieciowe
                 GlowneOkno okno = new GlowneOkno();
                 okno.Show();
                 this.Close();
-                MessageBox.Show("Zalogowano");
             }
             else
             {
-                MessageBox.Show("Nie zalogowano");
+                MessageBox.Show("Błędne dane logowania");
             }
             client.Disconnect();
         }
